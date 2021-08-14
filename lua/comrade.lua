@@ -17,8 +17,11 @@ function M.import()
     end
   end
 
-	-- Currently, only run the first candidate
-		importkt.import(imports[1])
+  importkt.prepare()
+
+  for _, import in ipairs(imports) do
+		importkt.import(import)
+  end
 end
 
 return M

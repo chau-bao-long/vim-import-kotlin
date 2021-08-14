@@ -5,6 +5,14 @@ local M = {}
 
 local import_cache_path = vim.env.HOME .. '/.import.lib'
 
+local result_cache = {}
+local pending_import = 0
+
+function M.prepare()
+  result_cache = {}
+  pending_import = 0
+end
+
 local function has_line_already_imported(line)
   for i = 1, vim.fn.line('$'), 1 do
     local l = vim.fn.getbufline(vim.fn.bufnr(), i)[1]
@@ -95,11 +103,19 @@ function M.import(...)
   if (#matches == 1) then
     add_line_to_buffer(matches[1])
   else
+    pending_import = pending_import + 1
     coroutine.wrap(function()
       local result = fzf.fzf(matches, "--ansi", { width = 100, height = 30, })
 
       if result then
-        add_line_to_buffer(result[1])
+        table.insert(result_cache, result[1])
+
+        -- wait for picking enough results before import
+        if pending_import == #result_cache then
+          for _, cache in ipairs(result_cache) do
+            add_line_to_buffer(cache)
+          end
+        end
       end
     end)()
   end

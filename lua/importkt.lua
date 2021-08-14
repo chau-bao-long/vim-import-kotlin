@@ -84,9 +84,10 @@ local function fill_suggestions_from_learning_path(matches, current_word)
   end
 end
 
-function M.import()
+function M.import(...)
+  local args = {...}
   local matches = {}
-  local current_word = vim.fn.expand('<cword>')
+  local current_word = args[1] or vim.fn.expand('<cword>')
 
   fill_suggestions_from_learning_path(matches, current_word)
   fill_suggestions_from_current_project(matches, current_word)

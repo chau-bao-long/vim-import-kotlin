@@ -6,7 +6,23 @@ local M = {}
 local import_cache_path = vim.env.HOME .. '/.import.lib'
 
 local function add_line_to_buffer(line)
-  if vim.fn.search(line) == 0 then
+  if vim.fn.search(line) ~= 0 then return end
+
+  local second_line = vim.fn.getbufline(vim.fn.bufnr(), 2)[1]
+  local third_line = vim.fn.getbufline(vim.fn.bufnr(), 3)[1]
+  local start_index = string.find(third_line, 'import')
+  local has_import_before = start_index == 1
+
+  -- need one blank line after package a.b.c
+  if second_line ~= '' then
+    vim.fn.appendbufline(vim.fn.bufnr(), 1, '')
+  end
+
+  -- make sure has one blank line after import block
+  if third_line == '' or has_import_before then
+    vim.fn.appendbufline(vim.fn.bufnr(), 2, 'import ' .. line)
+  else
+    vim.fn.appendbufline(vim.fn.bufnr(), 2, '')
     vim.fn.appendbufline(vim.fn.bufnr(), 2, 'import ' .. line)
   end
 end

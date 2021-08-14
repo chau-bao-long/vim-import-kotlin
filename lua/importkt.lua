@@ -5,8 +5,19 @@ local M = {}
 
 local import_cache_path = vim.env.HOME .. '/.import.lib'
 
+local function has_already_imported_line(line)
+  return vim.fn.search(line) ~= 0
+end
+
+local function is_import_same_package(line)
+  local first_line = vim.fn.getbufline(vim.fn.bufnr(), 1)[1]
+  local package_name = string.gsub(first_line, "package ", "")
+
+  return string.find(line, package_name) ~= nil
+end
+
 local function add_line_to_buffer(line)
-  if vim.fn.search(line) ~= 0 then return end
+  if has_already_imported_line(line) or is_import_same_package(line) then return end
 
   local second_line = vim.fn.getbufline(vim.fn.bufnr(), 2)[1]
   local third_line = vim.fn.getbufline(vim.fn.bufnr(), 3)[1]

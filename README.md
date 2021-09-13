@@ -4,13 +4,14 @@ Auto detect and import for kotlin/java project
 ## Installation
 
 ### Dependencies
-This plugin work best when combine with these plugins:
-- Fzf
+
+We need fzf to show dialog and pick the import from available candidates
 ```vim
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'vijaymarupudi/nvim-fzf'
 ```
+
 ### Using [vim-plug](https://github.com/junegunn/vim-plug)
+
 ```vim
 Plug 'chau-bao-long/vim-import-kotlin'
 ```
@@ -27,4 +28,8 @@ Run LearnImport to build import dictionary cache from library
 And map key to use it
 ```vim
 nnoremap <space>il :KotlinImport<cr>
+```
+If you has [Comrade](https://github.com/beeender/Comrade) setup properly, this command will use import results from intelliJ
+```vim
+nnoremap <space>ia :ComradeImport<cr>
 ```

@@ -1,5 +1,5 @@
 local fzf = require("fzf")
-local utils = require('utils')
+local utils = require('vim_import_kotlin/utils')
 
 local M = {}
 

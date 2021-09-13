@@ -1,4 +1,4 @@
-local importkt = require('importkt')
+local importkt = require('vim_import_kotlin/importkt')
 
 local M = {}
 

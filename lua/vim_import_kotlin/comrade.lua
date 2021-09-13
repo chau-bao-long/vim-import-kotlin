@@ -17,10 +17,10 @@ function M.import()
     end
   end
 
-  importkt.prepare()
+  importkt._prepare()
 
   for _, import in ipairs(imports) do
-		importkt.import(import)
+		importkt._import(import)
   end
 end
 

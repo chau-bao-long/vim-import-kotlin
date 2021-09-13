@@ -8,7 +8,7 @@ local import_cache_path = vim.env.HOME .. '/.import.lib'
 local result_cache = {}
 local pending_import = 0
 
-function M.prepare()
+function M._prepare()
   result_cache = {}
   pending_import = 0
 end
@@ -101,7 +101,7 @@ local function fill_suggestions_from_learning_path(matches, current_word)
   end
 end
 
-function M.import(...)
+function M._import(...)
   local args = {...}
   local matches = {}
   local current_word = args[1] or vim.fn.expand('<cword>')
@@ -128,6 +128,11 @@ function M.import(...)
       end
     end)()
   end
+end
+
+function M.import(...)
+  M._prepare()
+  M._import(...)
 end
 
 return M

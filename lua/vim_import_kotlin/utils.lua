@@ -14,4 +14,8 @@ function M.split(inputstr, delimiter)
   return t
 end
 
+function M.startswith(text, prefix)
+    return text:find(prefix, 1, true) == 1
+end
+
 return M

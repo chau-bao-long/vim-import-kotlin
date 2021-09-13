@@ -81,14 +81,23 @@ local function fill_suggestions_from_current_project(matches, current_word)
   end
 end
 
+local function is_import_line_invalid(line)
+  return utils.startswith(line, "/") or
+    utils.startswith(line, " ")
+end
+
 local function fill_suggestions_from_learning_path(matches, current_word)
   for line in io.lines(import_cache_path) do
+    if is_import_line_invalid(line) then goto continue end
+
     local words = utils.split(line, ".")
     local last_word = words[#words]
 
     if last_word == current_word then
       table.insert(matches, line)
     end
+
+    ::continue::
   end
 end
 
@@ -97,8 +106,8 @@ function M.import(...)
   local matches = {}
   local current_word = args[1] or vim.fn.expand('<cword>')
 
-  fill_suggestions_from_learning_path(matches, current_word)
   fill_suggestions_from_current_project(matches, current_word)
+  fill_suggestions_from_learning_path(matches, current_word)
 
   if (#matches == 1) then
     add_line_to_buffer(matches[1])

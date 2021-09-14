@@ -25,15 +25,15 @@ local function has_line_already_imported(line)
   return false
 end
 
-local function is_import_same_package(line)
+local function is_import_same_package(line, current_word)
   local first_line = vim.fn.getbufline(vim.fn.bufnr(), 1)[1]
   local package_name = string.gsub(first_line, "package ", "")
 
-  return string.find(line, package_name) ~= nil
+  return line == package_name .. "." .. current_word
 end
 
-local function add_line_to_buffer(line)
-  if has_line_already_imported(line) or is_import_same_package(line) then return end
+local function add_line_to_buffer(line, current_word)
+  if has_line_already_imported(line) or is_import_same_package(line, current_word) then return end
 
   local second_line = vim.fn.getbufline(vim.fn.bufnr(), 2)[1]
   local third_line = vim.fn.getbufline(vim.fn.bufnr(), 3)[1]
@@ -110,7 +110,7 @@ function M._import(...)
   fill_suggestions_from_learning_path(matches, current_word)
 
   if (#matches == 1) then
-    add_line_to_buffer(matches[1])
+    add_line_to_buffer(matches[1], current_word)
   else
     pending_import = pending_import + 1
     coroutine.wrap(function()

@@ -18,6 +18,7 @@ local function has_line_already_imported(line)
     local l = vim.fn.getbufline(vim.fn.bufnr(), i)[1]
 
     if l == 'import ' .. line then
+      print('line already imported')
       return true
     end
   end
@@ -29,7 +30,12 @@ local function is_import_same_package(line, current_word)
   local first_line = vim.fn.getbufline(vim.fn.bufnr(), 1)[1]
   local package_name = string.gsub(first_line, "package ", "")
 
-  return line == package_name .. "." .. current_word
+  if line == package_name .. "." .. current_word then
+    print("Skip import class on same package")
+    return true
+  end
+
+  return false
 end
 
 local function add_line_to_buffer(line, current_word)
@@ -122,7 +128,7 @@ function M._import(...)
         -- wait for picking enough results before import
         if pending_import == #result_cache then
           for _, cache in ipairs(result_cache) do
-            add_line_to_buffer(cache)
+            add_line_to_buffer(cache, current_word)
           end
         end
       end
